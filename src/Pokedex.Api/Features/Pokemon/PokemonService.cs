@@ -16,15 +16,18 @@ namespace Pokedex.Api.Features.Pokemon
     {
         private readonly ILogger<PokemonService> _logger;
         private readonly IApiClientFactory<PokeApiClient> _pokeApiClientFactory;
+        private readonly IApiClientFactory<ITranslatorApiClient> _translatorApiClientFactory;
         private readonly static Random _random = new Random();
 
         public PokemonService(
             ILogger<PokemonService> logger, 
-            IApiClientFactory<PokeApiClient> pokeApiClientFactory
+            IApiClientFactory<PokeApiClient> pokeApiClientFactory,
+            IApiClientFactory<ITranslatorApiClient> translatorApiClientFactory
         )
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _pokeApiClientFactory = pokeApiClientFactory ?? throw new ArgumentNullException(nameof(pokeApiClientFactory));
+            _translatorApiClientFactory = translatorApiClientFactory ?? throw new ArgumentNullException(nameof(translatorApiClientFactory));
         }
 
         public async Task<BasicPokemonInformation> GetBasicInfoByNameAsync(string pokemonName)
@@ -61,11 +64,37 @@ namespace Pokedex.Api.Features.Pokemon
             };
         }
 
-        private string GetRandomDescription(IList<PokemonSpeciesFlavorTexts> descriptions) => descriptions[_random.Next(descriptions.Count())].FlavorText;
-
-        public Task TranslateDescription(BasicPokemonInformation pokemonInfo)
+        public async Task TranslateDescription(BasicPokemonInformation pokemonInfo)
         {
-            throw new NotImplementedException();
+            if (pokemonInfo == null)
+            {
+                return;
+            }
+
+            var apiClient = _translatorApiClientFactory.GetInstance();
+            var originalDesc = pokemonInfo.Description;
+
+            try
+            {
+                if (pokemonInfo.Habitat?.ToLower() == "cave" || pokemonInfo.IsLegendary)
+                {
+                    pokemonInfo.Description = await apiClient.GetYodaTranslationFor(pokemonInfo.Description);
+                }
+                else
+                {
+                    pokemonInfo.Description = await apiClient.GetShakespeareTranslationFor(pokemonInfo.Description);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Error occurred translating description for Pokemon: {PokemonName}. Using original desc.", pokemonInfo.Name);
+
+                pokemonInfo.Description = originalDesc;
+            }
+
+            return;
         }
+
+        private string GetRandomDescription(IList<PokemonSpeciesFlavorTexts> descriptions) => descriptions[_random.Next(descriptions.Count())].FlavorText;
     }
 }
