@@ -10,9 +10,13 @@ using Microsoft.Extensions.Logging;
 using PokeApiNet;
 using Pokedex.Api.Clients;
 using Pokedex.Api.Clients.TranslatorApi;
+using Pokedex.Api.Utils;
 
 namespace Pokedex.Api.Features.Pokemon
 {
+    /// <summary>
+    ///     Implementation of IPokemonService.
+    /// </summary>
     public class PokemonService : IPokemonService
     {
         private readonly ILogger<PokemonService> _logger;
@@ -20,6 +24,12 @@ namespace Pokedex.Api.Features.Pokemon
         private readonly IApiClientFactory<ITranslatorApiClient> _translatorApiClientFactory;
         private readonly static Random _random = new Random();
 
+        /// <summary>
+        ///     Constructs a new instance of PokemonService.
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="pokeApiClientFactory"></param>
+        /// <param name="translatorApiClientFactory"></param>
         public PokemonService(
             ILogger<PokemonService> logger, 
             IApiClientFactory<PokeApiClient> pokeApiClientFactory,
@@ -31,6 +41,7 @@ namespace Pokedex.Api.Features.Pokemon
             _translatorApiClientFactory = translatorApiClientFactory ?? throw new ArgumentNullException(nameof(translatorApiClientFactory));
         }
 
+        /// <inheritdoc />
         public async Task<BasicPokemonInformation> GetBasicInfoByNameAsync(string pokemonName)
         {
             PokeApiNet.Pokemon pokemon = null;
@@ -59,12 +70,13 @@ namespace Pokedex.Api.Features.Pokemon
             return new BasicPokemonInformation
             {
                 Name = pokemonInfo.Name,
-                Description = GetRandomDescription(useableFlavorTexts),
+                Description = TextHelper.ReplaceNewLinesWith(GetRandomDescription(useableFlavorTexts)),
                 Habitat = pokemonInfo.Habitat.Name,
                 IsLegendary = pokemonInfo.IsLegendary
             };
         }
 
+        /// <inheritdoc />
         public async Task TranslateDescription(BasicPokemonInformation pokemonInfo)
         {
             if (pokemonInfo == null)
@@ -96,6 +108,11 @@ namespace Pokedex.Api.Features.Pokemon
             return;
         }
 
+        /// <summary>
+        ///     Selects a random description from a list of descriptions.
+        /// </summary>
+        /// <param name="descriptions"></param>
+        /// <returns></returns>
         private string GetRandomDescription(IList<PokemonSpeciesFlavorTexts> descriptions) => descriptions[_random.Next(descriptions.Count())].FlavorText;
     }
 }

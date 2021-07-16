@@ -8,17 +8,29 @@ using Microsoft.Extensions.Logging;
 
 namespace Pokedex.Api.Features.Pokemon
 {
+    /// <summary>
+    ///     Pokemon data 
+    /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
     public class PokemonController : ControllerBase
     {
         private readonly IPokemonService _pokemonService;
 
+        /// <summary>
+        ///     Constructs a new instance of PokemonController
+        /// </summary>
+        /// <param name="pokemonService"></param>
         public PokemonController(IPokemonService pokemonService)
         {
             _pokemonService = pokemonService ?? throw new ArgumentNullException(nameof(pokemonService));
         }
 
+        /// <summary>
+        ///     Fetches a Pokemon's basic information via name
+        /// </summary>
+        /// <param name="pokemonName"></param>
+        /// <returns></returns>
         [HttpGet("{pokemonName}")]
         public async Task<IActionResult> GetBasicInfo(string pokemonName)
         {
@@ -39,13 +51,32 @@ namespace Pokedex.Api.Features.Pokemon
             }
         }
 
+        /// <summary>
+        ///     Fetches a Pokemon's basic information via name with a fun translation applied to the description
+        /// </summary>
+        /// <param name="pokemonName"></param>
+        /// <returns></returns>
         [HttpGet("translated/{pokemonName}")]
-        public async Task<IActionResult> GetTranslatedDescription(string pokemonName)
+        public async Task<IActionResult> GetBasicInfoWithTranslatedDesc(string pokemonName)
         {
             try
             {
-                var res = await GetBasicInfo(pokemonName) as OkObjectResult;
-                var basicInfo = (BasicPokemonInformation) res.Value;
+                var res = await GetBasicInfo(pokemonName);
+
+                var isServerError = (res as StatusCodeResult)?.StatusCode == StatusCodes.Status500InternalServerError;
+                if (isServerError)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+
+                var isNotFound = (res as NotFoundResult) == null;
+                if (isNotFound)
+                {
+                    return NotFound();
+                }
+
+                var data = res as OkObjectResult;
+                var basicInfo = (BasicPokemonInformation) data.Value;
 
                 await _pokemonService.TranslateDescription(basicInfo);
 
