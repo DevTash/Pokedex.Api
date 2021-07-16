@@ -3,6 +3,9 @@ using Xunit;
 
 namespace Pokedex.Api.Tests.Features.Pokemon.ServiceTests
 {
+    /// <summary>
+    ///     PokemonService GetBasicInfoByNameAsync tests.
+    /// </summary>
     public class GetBasicInfoByNameAsyncTests : ServiceTestBase
     {
         [Theory]

@@ -3,6 +3,9 @@ using Xunit;
 
 namespace Pokedex.Api.Tests.Features.Pokemon.ServiceTests
 {
+    /// <summary>
+    ///     PokemonService TranslateDescription tests.
+    /// </summary>
     public class TranslateDescriptionTests : ServiceTestBase
     {
         [Fact]

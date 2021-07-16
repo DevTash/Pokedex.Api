@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -44,10 +43,17 @@ namespace Pokedex.Api.Features.Pokemon
         /// <inheritdoc />
         public async Task<BasicPokemonInformation> GetBasicInfoByNameAsync(string pokemonName)
         {
+            if (string.IsNullOrWhiteSpace(pokemonName))
+            {
+                return null;
+            }
+
             PokeApiNet.Pokemon pokemon = null;
             PokeApiNet.PokemonSpecies pokemonInfo = null;
 
             var apiClient = _pokeApiClientFactory.GetInstance();
+            
+            EnsureApiClientInstance(apiClient);
 
             try
             {
@@ -65,7 +71,7 @@ namespace Pokedex.Api.Features.Pokemon
                 throw;
             }
 
-            var useableFlavorTexts = pokemonInfo.FlavorTextEntries.Where(ft => ft.Language.Name == "en").ToList();
+            var useableFlavorTexts = pokemonInfo.FlavorTextEntries.Where(ft => ft.Language.Name.ToLower() == "en").ToList();
 
             return new BasicPokemonInformation
             {
@@ -84,12 +90,14 @@ namespace Pokedex.Api.Features.Pokemon
                 return;
             }
 
-            var apiClient = _translatorApiClientFactory.GetInstance();
             var originalDesc = pokemonInfo.Description;
+            var apiClient = _translatorApiClientFactory.GetInstance();
+
+            EnsureApiClientInstance(apiClient);
 
             try
             {
-                if (pokemonInfo.Habitat?.ToLower() == "cave" || pokemonInfo.IsLegendary)
+                if (pokemonInfo.Habitat.ToLower() == "cave" || pokemonInfo.IsLegendary)
                 {
                     pokemonInfo.Description = await apiClient.GetYodaTranslationFor(pokemonInfo.Description);
                 }
@@ -114,5 +122,21 @@ namespace Pokedex.Api.Features.Pokemon
         /// <param name="descriptions"></param>
         /// <returns></returns>
         private string GetRandomDescription(IList<PokemonSpeciesFlavorTexts> descriptions) => descriptions[_random.Next(descriptions.Count())].FlavorText;
+
+        /// <summary>
+        ///     Checks if the given API client is null and throws if true.
+        /// </summary>
+        /// <param name="apiClient"></param>
+        /// <typeparam name="T"></typeparam>
+        private void EnsureApiClientInstance<T>(T apiClient)
+        {
+            if (apiClient == null)
+            {
+                var errorMsg = $"{apiClient.GetType().Name} was null.";
+
+                _logger.LogCritical(errorMsg);
+                throw new NullReferenceException(errorMsg);
+            }
+        }
     }
 }
