@@ -32,6 +32,7 @@ namespace Pokedex.Api.Clients
                 type = _shakespeare;
             }
 
+            // TODO: Should probably implement caching here as we may have this translation already!
             var res = await _client.GetAsync($"{type}.{_translationFormat}?text={GetUrlSafeText(content)}");
 
             res.EnsureSuccessStatusCode();
