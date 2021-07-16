@@ -51,7 +51,7 @@ namespace Pokedex.Api.Features.Pokemon
 
                 return Ok(basicInfo);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
