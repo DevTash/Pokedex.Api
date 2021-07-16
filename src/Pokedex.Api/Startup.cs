@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Pokedex.Api.Features.Pokemon;
 
 namespace Pokedex.Api
 {
@@ -27,6 +28,8 @@ namespace Pokedex.Api
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddSingleton<IPokemonService, PokemonService>();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -41,7 +44,9 @@ namespace Pokedex.Api
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Pokedex v1"));
+                app.UseSwaggerUI(c => {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Pokedex v1");
+                });
             }
 
             app.UseHttpsRedirection();
