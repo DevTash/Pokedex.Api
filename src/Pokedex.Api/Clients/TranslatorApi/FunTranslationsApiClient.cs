@@ -39,17 +39,22 @@ namespace Pokedex.Api.Clients.TranslatorApi
         /// <param name="content"></param>
         /// <param name="translationType"></param>
         /// <returns></returns>
-        private async Task<string> GetTranslation(string content, TranslationsType translationType)
+        public async Task<string> GetTranslation(string content, TranslationsType translationType)
         {
+            if (string.IsNullOrWhiteSpace(content))
+            {
+                return "";
+            }
+
             // TODO: Should probably implement caching here as we may have this translation already!
-            var res = await _client.GetAsync($"{translationType.ToString()}.json?text={GetUrlSafeText(content)}");
+            var res = await _client.GetAsync($"{translationType.ToString().ToLower()}.json?text={GetUrlSafeText(content)}");
 
             res.EnsureSuccessStatusCode();
 
             var payload = await res.Content.ReadAsStringAsync();
 
             var translation = JsonSerializer.Deserialize<FunTranslationResponse>(payload, new JsonSerializerOptions {
-                PropertyNameCaseInsensitive = true
+                PropertyNameCaseInsensitive = true,
             });
             
             return translation.Contents.Translated;
