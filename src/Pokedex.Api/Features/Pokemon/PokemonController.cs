@@ -30,7 +30,12 @@ namespace Pokedex.Api.Features.Pokemon
         /// <returns></returns>
         [HttpGet("{pokemonName}")]
         public async Task<IActionResult> GetBasicInfo(string pokemonName)
-        {
+        {   
+            if (string.IsNullOrWhiteSpace(pokemonName))
+            {
+                return BadRequest("Pokemon name is required.");
+            }
+
             try
             {
                 var basicInfo = await _pokemonService.GetBasicInfoByNameAsync(pokemonName);
@@ -60,13 +65,19 @@ namespace Pokedex.Api.Features.Pokemon
             {
                 var res = await GetBasicInfo(pokemonName);
 
+                var isBadRequest = (res as BadRequestObjectResult) != null;
+                if (isBadRequest)
+                {
+                    return res as BadRequestObjectResult;
+                }
+
                 var isServerError = (res as StatusCodeResult)?.StatusCode == StatusCodes.Status500InternalServerError;
                 if (isServerError)
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError);
                 }
 
-                var isNotFound = (res as NotFoundResult) == null;
+                var isNotFound = (res as NotFoundResult) != null;
                 if (isNotFound)
                 {
                     return NotFound();
