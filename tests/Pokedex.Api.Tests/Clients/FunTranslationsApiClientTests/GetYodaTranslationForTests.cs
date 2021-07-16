@@ -4,6 +4,9 @@ using Xunit;
 
 namespace Pokedex.Api.Tests.Clients.FunTranslationsApiClientTests
 {
+    /// <summary>
+    ///     FunTranslationsApiClient GetYodaTranslationFor tests.
+    /// </summary>
     public class GetYodaTranslationForTests : ClientTestBase
     {
         [Fact]

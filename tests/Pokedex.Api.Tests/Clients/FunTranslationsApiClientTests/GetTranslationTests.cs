@@ -6,6 +6,9 @@ using Xunit;
 
 namespace Pokedex.Api.Tests.Clients.FunTranslationsApiClientTests
 {
+    /// <summary>
+    ///     FunTranslationsApiClient GetTranslation tests.
+    /// </summary>
     public class GetTranslationTests : ClientTestBase
     {
         [Theory]

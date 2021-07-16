@@ -1,13 +1,12 @@
-using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using NSubstitute;
-using Pokedex.Api.Clients.TranslatorApi;
 using Xunit;
 
 namespace Pokedex.Api.Tests.Clients.FunTranslationsApiClientTests
 {
+    /// <summary>
+    ///     FunTranslationsApiClient GetShakespeareTranslationFor tests.
+    /// </summary>
     public class GetShakespeareTranslationForTests : ClientTestBase
     {
         [Fact]

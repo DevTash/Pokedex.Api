@@ -6,6 +6,9 @@ using Xunit;
 
 namespace Pokedex.Api.Tests.Clients.FunTranslationsApiClientTests
 {
+    /// <summary>
+    ///     FunTranslationsApiClient constructor tests.
+    /// </summary>
     public class ConstructorTests
     {
         [Fact]

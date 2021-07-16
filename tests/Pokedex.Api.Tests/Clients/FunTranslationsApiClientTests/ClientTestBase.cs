@@ -1,5 +1,4 @@
 using System.Net.Http;
-using NSubstitute;
 using Pokedex.Api.Clients.TranslatorApi;
 
 namespace Pokedex.Api.Tests.Clients.FunTranslationsApiClientTests
