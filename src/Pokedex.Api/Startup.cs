@@ -6,6 +6,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using PokeApiNet;
 using Pokedex.Api.Clients;
+using Pokedex.Api.Clients.PokeApi;
+using Pokedex.Api.Clients.TranslatorApi;
 using Pokedex.Api.Features.Pokemon;
 
 namespace Pokedex.Api
@@ -24,7 +26,7 @@ namespace Pokedex.Api
         {
             services.AddHttpClient();
             services.AddHttpClient<PokeApiClient>();
-            services.AddHttpClient<ITranslatorApiClient, TranslatorApiClient>();
+            services.AddHttpClient<ITranslatorApiClient, FunTranslationsApiClient>();
 
             services.AddSingleton<IApiClientFactory<PokeApiClient>, PokeApiClientFactory>();
             services.AddSingleton<IApiClientFactory<ITranslatorApiClient>, TranslatorApiClientFactory>();

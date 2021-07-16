@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using PokeApiNet;
 using Pokedex.Api.Clients;
+using Pokedex.Api.Clients.TranslatorApi;
 
 namespace Pokedex.Api.Features.Pokemon
 {
