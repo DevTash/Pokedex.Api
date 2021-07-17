@@ -1,3 +1,4 @@
+using MELT;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using PokeApiNet;
@@ -13,9 +14,9 @@ namespace Pokedex.Api.Tests.Features.Pokemon.ServiceTests
     public class ServiceTestBase
     {
         /// <summary>
-        ///     Useful for mocking/inspecting logger.
+        ///     Useful for inspecting logs.
         /// </summary>
-        protected readonly ILogger<PokemonService> MockLogger;
+        protected readonly ITestLoggerSink LoggerSink;
 
         /// <summary>
         ///     Useful for mocking/inspecting PokeApiClientFactory.
@@ -37,10 +38,14 @@ namespace Pokedex.Api.Tests.Features.Pokemon.ServiceTests
         /// </summary>
         public ServiceTestBase()
         {
-            MockLogger = Substitute.For<ILogger<PokemonService>>();
+            var loggerFactory = TestLoggerFactory.Create();
+
+            LoggerSink = loggerFactory.Sink;
+
+            var logger = loggerFactory.CreateLogger<PokemonService>();
             MockPokeApiClientFactory = Substitute.For<IApiClientFactory<PokeApiClient>>();
             MockTranslatorApiClientFactory = Substitute.For<IApiClientFactory<ITranslatorApiClient>>();
-            Sut = new PokemonService(MockLogger, MockPokeApiClientFactory, MockTranslatorApiClientFactory);
+            Sut = new PokemonService(logger, MockPokeApiClientFactory, MockTranslatorApiClientFactory);
         }
     }
 }

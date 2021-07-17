@@ -132,7 +132,7 @@ namespace Pokedex.Api.Features.Pokemon
         {
             if (apiClient == null)
             {
-                var errorMsg = $"{apiClient.GetType().Name} was null.";
+                var errorMsg = $"{typeof(T).Name} is null";
 
                 _logger.LogCritical(errorMsg);
                 throw new NullReferenceException(errorMsg);
