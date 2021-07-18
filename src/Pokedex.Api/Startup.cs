@@ -33,6 +33,12 @@ namespace Pokedex.Api
             services.AddSingleton<IPokemonService, PokemonService>();
 
             services.AddControllers();
+
+            services.AddRouting(options =>
+            {
+                options.LowercaseUrls = true;
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Pokedex", Version = "v1" });
