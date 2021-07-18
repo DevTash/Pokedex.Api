@@ -46,7 +46,7 @@ namespace Pokedex.Api.Tests.Features.Pokemon.ServiceTests
             MockPokeApiClientFactory.GetInstance().ReturnsForAnyArgs(pokeApiClient);
             
             // Act
-            Func<Task> getBasicInfo = async () => await Sut.GetBasicInfoByNameAsync(pokemonName);
+            Func<Task> getBasicInfo = () => Sut.GetBasicInfoByNameAsync(pokemonName);
             
             // Assert
             using (new AssertionScope())
@@ -66,7 +66,7 @@ namespace Pokedex.Api.Tests.Features.Pokemon.ServiceTests
             MockPokeApiClientFactory.GetInstance().ReturnsForAnyArgs(pokeApiClient);
 
             // Act
-            Func<Task> getBasicInfo = async () => await Sut.GetBasicInfoByNameAsync(pokemonName);
+            Func<Task> getBasicInfo = () => Sut.GetBasicInfoByNameAsync(pokemonName);
 
             // Assert
             using (new AssertionScope())

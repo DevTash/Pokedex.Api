@@ -98,7 +98,7 @@ namespace Pokedex.Api.Features.Pokemon
 
             try
             {
-                if (pokemonInfo.Habitat.ToLower() == "cave" || pokemonInfo.IsLegendary)
+                if (pokemonInfo.Habitat?.ToLower() == "cave" || pokemonInfo.IsLegendary)
                 {
                     pokemonInfo.Description = await apiClient.GetYodaTranslationFor(pokemonInfo.Description);
                 }

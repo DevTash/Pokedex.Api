@@ -73,7 +73,7 @@ namespace Pokedex.Api.Tests.Features.Pokemon.ControllerTests
         }
 
         [Fact]
-        public async Task Given_GetBasicInfo_Returns_Ok_Then_TranslateDescription_Is_Called_With_Pokeman_BasicInfo()
+        public async Task Given_GetBasicInfo_Returns_Ok_Then_TranslateDescription_Is_Called_With_Pokemon_BasicInfo()
         {
             // Arrange
             var pokemonName = "mewtwo";
