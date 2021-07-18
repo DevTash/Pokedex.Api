@@ -116,12 +116,14 @@ namespace Pokedex.Api.Tests.Clients.FunTranslationsApiClientTests
         public async Task Given_Translation_Response_Is_Success_Then_Translated_Content_Is_Returned()
         {
             // Arrange
-            
-            
+            MockHttpMessageHandler.StatusCode = HttpStatusCode.OK;
+            MockHttpMessageHandler.Content = new StringContent("{ \"Contents\": { \"Translated\": \"Translated text from API\" } }");
+
             // Act
-            
+            var translatedText = await Sut.GetTranslation("Some text to translate", TranslationsType.Yoda);            
             
             // Assert
+            translatedText.Should().Be("Translated text from API");
             
         }
 
