@@ -7,7 +7,9 @@
 ### Quick Start
 To run the Pokedex API:
 1. Ensure you have installed the prerequisites by visiting the links above. You may need to add these tools to your PATH and/or restart your terminal.
-2. Using your terminal, navigate to **OR** create a directory to clone the Pokedex API repo into
+
+2. Using your terminal, navigate to **OR** create a directory to clone the Pokedex API repo into.
+
 3. Inside the directory from step 2, use your terminal to run:
 ```    
     git clone https://github.com/DevTash/Pokedex.Api.git .
