@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using PokeApiNet;
 using Pokedex.Api.Clients;
+using Pokedex.Api.Clients.PokeApi;
 using Pokedex.Api.Clients.TranslatorApi;
 using Pokedex.Api.Utils;
 
@@ -19,7 +20,7 @@ namespace Pokedex.Api.Features.Pokemon
     public class PokemonService : IPokemonService
     {
         private readonly ILogger<PokemonService> _logger;
-        private readonly IApiClientFactory<PokeApiClient> _pokeApiClientFactory;
+        private readonly IApiClientFactory<IPokeApiClientWrapper> _pokeApiClientFactory;
         private readonly IApiClientFactory<ITranslatorApiClient> _translatorApiClientFactory;
         private readonly static Random _random = new Random();
 
@@ -31,7 +32,7 @@ namespace Pokedex.Api.Features.Pokemon
         /// <param name="translatorApiClientFactory"></param>
         public PokemonService(
             ILogger<PokemonService> logger, 
-            IApiClientFactory<PokeApiClient> pokeApiClientFactory,
+            IApiClientFactory<IPokeApiClientWrapper> pokeApiClientFactory,
             IApiClientFactory<ITranslatorApiClient> translatorApiClientFactory
         )
         {
@@ -49,7 +50,7 @@ namespace Pokedex.Api.Features.Pokemon
             }
 
             PokeApiNet.Pokemon pokemon = null;
-            PokeApiNet.PokemonSpecies pokemonInfo = null;
+            PokemonSpecies pokemonInfo = null;
 
             var apiClient = _pokeApiClientFactory.GetInstance();
             
@@ -67,7 +68,7 @@ namespace Pokedex.Api.Features.Pokemon
             }
             catch (HttpRequestException ex) when (ex.InnerException is SocketException)
             {
-                _logger.LogCritical(ex, "A call using {ApiClientNameType} failed. The service maybe down", apiClient.GetType().Name);
+                _logger.LogCritical(ex, "A call to external pokemon api failed. The service maybe down");
                 throw;
             }
 

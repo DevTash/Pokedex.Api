@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
-using PokeApiNet;
 using Pokedex.Api.Clients;
+using Pokedex.Api.Clients.PokeApi;
 using Pokedex.Api.Clients.TranslatorApi;
 using Pokedex.Api.Features.Pokemon;
 using Xunit;
@@ -20,7 +20,7 @@ namespace Pokedex.Api.Tests.Features.Pokemon.ServiceTests
         [MemberData(nameof(InvalidDependencies))]
         public void Given_Missing_Dependency_Then_ArgumentNullException_Is_Thrown(
             ILogger<PokemonService> logger,
-            IApiClientFactory<PokeApiClient> pokeApiClientFactory,
+            IApiClientFactory<IPokeApiClientWrapper> pokeApiClientFactory,
             IApiClientFactory<ITranslatorApiClient> translatorApiClientFactory
         )
         {
@@ -37,7 +37,7 @@ namespace Pokedex.Api.Tests.Features.Pokemon.ServiceTests
         {
             // Arrange
             var logger = Substitute.For<ILogger<PokemonService>>();
-            var pokeApiClientFactory = Substitute.For<IApiClientFactory<PokeApiClient>>();
+            var pokeApiClientFactory = Substitute.For<IApiClientFactory<IPokeApiClientWrapper>>();
             var translatorApiClientFactory = Substitute.For<IApiClientFactory<ITranslatorApiClient>>();
 
             // Act
@@ -52,7 +52,7 @@ namespace Pokedex.Api.Tests.Features.Pokemon.ServiceTests
             yield return new object[]
             {
                 null,
-                Substitute.For<IApiClientFactory<PokeApiClient>>(),
+                Substitute.For<IApiClientFactory<IPokeApiClientWrapper>>(),
                 Substitute.For<IApiClientFactory<ITranslatorApiClient>>()
             };
 
@@ -66,7 +66,7 @@ namespace Pokedex.Api.Tests.Features.Pokemon.ServiceTests
             yield return new object[]
             {
                 Substitute.For<ILogger<PokemonService>>(),
-                Substitute.For<IApiClientFactory<PokeApiClient>>(),
+                Substitute.For<IApiClientFactory<IPokeApiClientWrapper>>(),
                 null
             };
         }

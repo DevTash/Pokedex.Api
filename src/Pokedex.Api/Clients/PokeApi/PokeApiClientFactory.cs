@@ -7,7 +7,7 @@ namespace Pokedex.Api.Clients.PokeApi
     /// <summary>
     ///     Factory for typed PokeApiClient. 
     /// </summary>
-    public class PokeApiClientFactory : IApiClientFactory<PokeApiClient>
+    public class PokeApiClientFactory : IApiClientFactory<IPokeApiClientWrapper>
     {
         private readonly IServiceProvider _serviceProvider;
 
@@ -25,6 +25,6 @@ namespace Pokedex.Api.Clients.PokeApi
         /// </summary>
         /// <typeparam name="PokeApiClient"></typeparam>
         /// <returns></returns>
-        public PokeApiClient GetInstance() => _serviceProvider.GetRequiredService<PokeApiClient>();
+        public IPokeApiClientWrapper GetInstance() => _serviceProvider.GetRequiredService<IPokeApiClientWrapper>();
     }
 }

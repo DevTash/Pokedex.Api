@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using PokeApiNet;
 using Pokedex.Api.Clients;
+using Pokedex.Api.Clients.PokeApi;
 using Pokedex.Api.Clients.TranslatorApi;
 using Pokedex.Api.Features.Pokemon;
 
@@ -21,7 +22,7 @@ namespace Pokedex.Api.Tests.Features.Pokemon.ServiceTests
         /// <summary>
         ///     Useful for mocking/inspecting PokeApiClientFactory.
         /// </summary>
-        protected readonly IApiClientFactory<PokeApiClient> MockPokeApiClientFactory;
+        protected readonly IApiClientFactory<IPokeApiClientWrapper> MockPokeApiClientFactory;
 
         /// <summary>
         ///     Useful for mocking/inspecting TranslatorApiClientFactory.
@@ -43,7 +44,7 @@ namespace Pokedex.Api.Tests.Features.Pokemon.ServiceTests
             LoggerSink = loggerFactory.Sink;
 
             var logger = loggerFactory.CreateLogger<PokemonService>();
-            MockPokeApiClientFactory = Substitute.For<IApiClientFactory<PokeApiClient>>();
+            MockPokeApiClientFactory = Substitute.For<IApiClientFactory<IPokeApiClientWrapper>>();
             MockTranslatorApiClientFactory = Substitute.For<IApiClientFactory<ITranslatorApiClient>>();
             Sut = new PokemonService(logger, MockPokeApiClientFactory, MockTranslatorApiClientFactory);
         }

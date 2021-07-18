@@ -28,7 +28,9 @@ namespace Pokedex.Api
             services.AddHttpClient<PokeApiClient>();
             services.AddHttpClient<ITranslatorApiClient, FunTranslationsApiClient>();
 
-            services.AddSingleton<IApiClientFactory<PokeApiClient>, PokeApiClientFactory>();
+            services.AddTransient<IPokeApiClientWrapper, PokeApiClientWrapper>();
+
+            services.AddSingleton<IApiClientFactory<IPokeApiClientWrapper>, PokeApiClientFactory>();
             services.AddSingleton<IApiClientFactory<ITranslatorApiClient>, TranslatorApiClientFactory>();
             services.AddSingleton<IPokemonService, PokemonService>();
 

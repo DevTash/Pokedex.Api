@@ -17,7 +17,7 @@ namespace Pokedex.Api.Tests.Clients.FunTranslationsApiClientTests
             await Sut.GetShakespeareTranslationFor("test content");
 
             // Assert
-            MockHttpMessageHandler.Uri.Should().Contain("shakespeare");
+            MockHttpMessageHandler.CurrentUri.Should().Contain("shakespeare");
 
         }
     }

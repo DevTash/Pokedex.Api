@@ -17,7 +17,7 @@ namespace Pokedex.Api.Tests.Clients.FunTranslationsApiClientTests
             await Sut.GetYodaTranslationFor("test content");
 
             // Assert
-            MockHttpMessageHandler.Uri.Should().Contain("yoda");
+            MockHttpMessageHandler.CurrentUri.Should().Contain("yoda");
 
         }
     }

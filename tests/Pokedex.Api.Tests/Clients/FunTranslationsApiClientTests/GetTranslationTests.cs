@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Pokedex.Api.Clients.TranslatorApi;
@@ -32,7 +35,7 @@ namespace Pokedex.Api.Tests.Clients.FunTranslationsApiClientTests
             await Sut.GetTranslation(content, TranslationsType.Yoda);
 
             // Assert
-            MockHttpMessageHandler.Uri.Should().BeNull();
+            MockHttpMessageHandler.CurrentUri.Should().BeNull();
         }
 
         [Fact]
@@ -43,7 +46,7 @@ namespace Pokedex.Api.Tests.Clients.FunTranslationsApiClientTests
             await Sut.GetTranslation("Sample text to translate", TranslationsType.Yoda);
 
             // Assert
-            MockHttpMessageHandler.Uri.Should().NotBeNullOrWhiteSpace();
+            MockHttpMessageHandler.CurrentUri.Should().NotBeNullOrWhiteSpace();
         }
 
         [Theory]
@@ -56,7 +59,7 @@ namespace Pokedex.Api.Tests.Clients.FunTranslationsApiClientTests
             await Sut.GetTranslation("Sample text to translate", type);
 
             // Assert
-            MockHttpMessageHandler.Uri.Should().Contain(type.ToString().ToLower());
+            MockHttpMessageHandler.CurrentUri.Should().Contain(type.ToString().ToLower());
         }
 
         [Fact]
@@ -67,7 +70,7 @@ namespace Pokedex.Api.Tests.Clients.FunTranslationsApiClientTests
             await Sut.GetTranslation("Sample text to translate", TranslationsType.Yoda);
 
             // Assert
-            MockHttpMessageHandler.Uri.Should().Contain(".json");
+            MockHttpMessageHandler.CurrentUri.Should().Contain(".json");
         }
 
         [Fact]
@@ -78,7 +81,7 @@ namespace Pokedex.Api.Tests.Clients.FunTranslationsApiClientTests
             await Sut.GetTranslation("Sample text to translate", TranslationsType.Yoda);
 
             // Assert
-            MockHttpMessageHandler.Uri.Should().Contain("?text=");
+            MockHttpMessageHandler.CurrentUri.Should().Contain("?text=");
         }
 
         [Fact]
@@ -89,17 +92,37 @@ namespace Pokedex.Api.Tests.Clients.FunTranslationsApiClientTests
             await Sut.GetTranslation("Sample text to translate", TranslationsType.Yoda);
 
             // Assert
-            MockHttpMessageHandler.Uri.Should().Contain("Sample%20text%20to%20translate");
+            MockHttpMessageHandler.CurrentUri.Should().Contain("Sample%20text%20to%20translate");
+        }
+
+        [Theory]
+        [InlineData(HttpStatusCode.BadRequest)]
+        [InlineData(HttpStatusCode.InternalServerError)]
+        [InlineData(HttpStatusCode.NotFound)]
+        [InlineData(HttpStatusCode.TooManyRequests)]
+        public void Given_Translation_Response_Is_Not_Success_Then_Exception_Is_Thrown(HttpStatusCode statusCode)
+        {
+            // Arrange
+            MockHttpMessageHandler.StatusCode = statusCode;
+
+            // Act
+            Func<Task> translate = () => Sut.GetTranslation("Sample text to translate", TranslationsType.Yoda);
+
+            // Assert
+            translate.Should().Throw<HttpRequestException>();
         }
 
         [Fact]
-        public void Given_Translation_Response_Is_Not_Success_Then_Exception_Is_Thrown()
+        public async Task Given_Translation_Response_Is_Success_Then_Translated_Content_Is_Returned()
         {
             // Arrange
-
+            
+            
             // Act
-
+            
+            
             // Assert
+            
         }
 
         public static IEnumerable<object[]> InvalidContent()
