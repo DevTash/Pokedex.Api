@@ -9,7 +9,7 @@ namespace Pokedex.Api.Features.Pokemon
     ///     Pokemon data 
     /// </summary>
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("~/api/v1/[controller]")]
     public class PokemonController : ControllerBase
     {
         private readonly IPokemonService _pokemonService;
