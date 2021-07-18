@@ -14,6 +14,6 @@ RUN dotnet publish -c Release -o ./publish --no-restore --no-build ./src/Pokedex
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 as API
 WORKDIR /api
 COPY --from=BUILD ./publish /api/
-ENV ASPNETCORE_URLS=http://+:5006
-EXPOSE 5006
+ENV ASPNETCORE_URLS=http://+:5000
+EXPOSE 5000
 ENTRYPOINT [ "dotnet", "Pokedex.Api.dll" ]
