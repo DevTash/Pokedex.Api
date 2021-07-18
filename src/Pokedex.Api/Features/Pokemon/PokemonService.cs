@@ -76,7 +76,7 @@ namespace Pokedex.Api.Features.Pokemon
             return new BasicPokemonInformation
             {
                 Name = pokemonInfo.Name,
-                Description = TextHelper.ReplaceNewLinesWith(GetRandomDescription(useableFlavorTexts)),
+                Description = TextHelper.ReplaceCharacterEscapesWith(GetRandomDescription(useableFlavorTexts)),
                 Habitat = pokemonInfo.Habitat.Name,
                 IsLegendary = pokemonInfo.IsLegendary
             };

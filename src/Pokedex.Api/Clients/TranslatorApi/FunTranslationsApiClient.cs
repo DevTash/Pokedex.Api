@@ -65,6 +65,6 @@ namespace Pokedex.Api.Clients.TranslatorApi
         /// </summary>
         /// <param name="content"></param>
         /// <returns></returns>
-        private string GetUrlSafeText(string content) => Uri.EscapeUriString(TextHelper.ReplaceNewLinesWith(content));
+        private string GetUrlSafeText(string content) => Uri.EscapeUriString(TextHelper.ReplaceCharacterEscapesWith(content));
     }
 }
