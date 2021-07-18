@@ -1,27 +1,34 @@
 # Pokedex API
-
-## Getting Started
-
 ### Prerequisites
-* Dotnet 5
-* VS Code
-* Docker
+* [Git](https://git-scm.com/) - To clone the Pokedex API repo 🗄️
+* [Docker Desktop](https://www.docker.com/get-started) - Container Technology 🐳
+* Bash / [WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10) - To run `build-image.sh` 😄
 
-### Running
-#### VS Code
-##### Extensions
-##### Debugging
+### Quick Start
+To run the Pokedex API:
+1. Ensure you have installed the prerequisites by visiting the links above. You may need to add these tools to your PATH and/or restart your terminal.
+2. Using your terminal, navigate to **OR** create a directory to clone the Pokedex API repo into
+3. Inside the directory from step 2, use your terminal to run:
+```    
+    git clone https://github.com/DevTash/Pokedex.Api.git .
+``` 
+4. From the root of the project, use your terminal to run:
+```
+    bash build-image.sh
+```
+This will build the Pokedex API using Docker resulting in `pokedex-api:latest` image and tag.
 
+5. Using your terminal, run:
+```
+    docker run --rm  -p 5000:5000/tcp pokedex-api:latest
+```
+This command will start a container based on the image we created in the previous step. `--rm` tells Docker to remove the container when we stop it using `Ctrl + c`.
 
-#### Docker
-##### Building the image
-##### Running the container
+6. Using your browser, navigate to: `http://localhost:5000`. You should be presented with Swagger UI
 
-### Notes on Testing
-#### dotnet watch test --no-restore --collect:"XPlat Code Coverage" 
-#### TestResults dir
-#### Coverage Gutters
+![Swagger UI for Pokedex API](./docs/images/swagger-ui.png)
 
+7. Go ahead, try it out 🥳
 
 ## Improvements
 * Add integration tests to run during deployment
@@ -36,3 +43,4 @@
 * Rate limiting
 * Dev Ops
 * Allow locale to be passed via query string param
+* Better utilization of SwaggerDoc
