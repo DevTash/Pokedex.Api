@@ -5,7 +5,7 @@ using PokeApiNet;
 namespace Pokedex.Api.Clients.PokeApi
 {
     /// <summary>
-    ///     Wrapper for PokeApiNet.PokeApiClient
+    ///     Wrapper for PokeApiNet.PokeApiClient.
     /// </summary>
     public class PokeApiClientWrapper : IPokeApiClientWrapper
     {
@@ -18,7 +18,7 @@ namespace Pokedex.Api.Clients.PokeApi
         }
 
         /// <summary>
-        ///     Wrapper for PokeApiNet.PokeApiClient GetResourceAsync
+        ///     Wrapper for PokeApiNet.PokeApiClient GetResourceAsync.
         /// </summary>
         /// <param name="input"></param>
         /// <typeparam name="T"></typeparam>
@@ -29,7 +29,7 @@ namespace Pokedex.Api.Clients.PokeApi
         }
 
         /// <summary>
-        ///     Wrapper for PokeApiNet.PokeApiClient GetResourceAsync
+        ///     Wrapper for PokeApiNet.PokeApiClient GetResourceAsync.
         /// </summary>
         /// <param name="input"></param>
         /// <typeparam name="T"></typeparam>
