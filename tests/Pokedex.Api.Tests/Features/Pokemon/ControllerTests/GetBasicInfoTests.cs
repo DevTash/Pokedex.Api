@@ -69,7 +69,7 @@ namespace Pokedex.Api.Tests.Features.Pokemon.ControllerTests
         }
 
         [Fact]
-        public async Task Given_PokemonService_Returns_BasicPokemon_Info_Then_OkResult_Is_Returned()
+        public async Task Given_PokemonService_Returns_BasicPokemon_Info_Then_OkResult_Is_Returned_With_Correct_Data()
         {
             // Arrange
             var pokemonName = "mewtwo";

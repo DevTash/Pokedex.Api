@@ -29,7 +29,7 @@ namespace Pokedex.Api.Features.Pokemon
         /// <param name="pokemonName"></param>
         /// <returns></returns>
         [HttpGet("{pokemonName}")]
-        public async Task<IActionResult> GetBasicInfo(string pokemonName)
+        public async Task<IActionResult> GetBasicInfo([FromRoute] string pokemonName)
         {   
             if (string.IsNullOrWhiteSpace(pokemonName))
             {
@@ -59,36 +59,28 @@ namespace Pokedex.Api.Features.Pokemon
         /// <param name="pokemonName"></param>
         /// <returns></returns>
         [HttpGet("translated/{pokemonName}")]
-        public async Task<IActionResult> GetBasicInfoWithTranslatedDesc(string pokemonName)
+        public async Task<IActionResult> GetBasicInfoWithTranslatedDesc([FromRoute] string pokemonName)
         {
             try
             {
-                var res = await GetBasicInfo(pokemonName);
+                var basicInfoRes = await GetBasicInfo(pokemonName);
 
-                var isBadRequest = (res as BadRequestObjectResult) != null;
-                if (isBadRequest)
+                if (basicInfoRes is OkObjectResult)
                 {
-                    return res as BadRequestObjectResult;
+                    var data = basicInfoRes as OkObjectResult;
+                    var basicInfo = (BasicPokemonInformation)data.Value;
+
+                    await _pokemonService.TranslateDescription(basicInfo);
+
+                    return Ok(basicInfo);
                 }
 
-                var isServerError = (res as StatusCodeResult)?.StatusCode == StatusCodes.Status500InternalServerError;
-                if (isServerError)
+                return basicInfoRes switch
                 {
-                    return StatusCode(StatusCodes.Status500InternalServerError);
-                }
-
-                var isNotFound = (res as NotFoundResult) != null;
-                if (isNotFound)
-                {
-                    return NotFound();
-                }
-
-                var data = res as OkObjectResult;
-                var basicInfo = (BasicPokemonInformation) data.Value;
-
-                await _pokemonService.TranslateDescription(basicInfo);
-
-                return Ok(basicInfo);
+                    BadRequestObjectResult => basicInfoRes,
+                    NotFoundResult => basicInfoRes,
+                    StatusCodeResult => basicInfoRes
+                };
             }
             catch (Exception)
             {
